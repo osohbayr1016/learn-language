@@ -23,10 +23,21 @@ type Placeholders<S extends string> = S extends `${string}{${infer P}}${infer Re
   ? P | Placeholders<Rest>
   : never
 
-type ParamsFor<K extends MessageKey> =
-  Placeholders<(typeof mn)[K]> extends never
-    ? [params?: MessageParams]
-    : [params: Record<Placeholders<(typeof mn)[K]>, string | number>]
+type ParamsFor<K extends MessageKey> = [Placeholders<(typeof mn)[K]>] extends [never]
+  ? [params?: MessageParams]
+  : [params: Record<Placeholders<(typeof mn)[K]>, string | number>]
+
+/**
+ * The subset of keys whose message takes no placeholders.
+ *
+ * Components that accept a message key as a *prop* should use this rather than
+ * `MessageKey`: passing the wide union to `t()` would make the params argument
+ * mandatory (some member of the union needs it), so narrowing here is what
+ * keeps `t(props.titleKey)` both legal and safe.
+ */
+export type SimpleMessageKey = {
+  [K in MessageKey]: [Placeholders<(typeof mn)[K]>] extends [never] ? K : never
+}[MessageKey]
 
 const PLACEHOLDER = /\{(\w+)\}/g
 

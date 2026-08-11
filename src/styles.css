@@ -1,0 +1,306 @@
+/*
+ * Design tokens.
+ *
+ * The palette is deliberately low-contrast-warm rather than the usual
+ * high-saturation "language app" look — learners sit with this for 20 minutes
+ * a day and the Japanese glyphs need to be the loudest thing on screen.
+ */
+:root {
+  --bg: #0b1020;
+  --bg-raised: #141b2f;
+  --bg-input: #1b2440;
+  --border: #26314f;
+  --border-strong: #38456b;
+
+  --text: #e8ecf7;
+  --text-muted: #97a1bd;
+  --text-faint: #6a7492;
+
+  --accent: #f0578a;
+  --accent-soft: #f0578a22;
+  --accent-text: #ffd9e5;
+
+  --good: #3ecf8e;
+  --good-soft: #3ecf8e22;
+  --bad: #ff6b6b;
+  --bad-soft: #ff6b6b22;
+  --warn: #f5c451;
+
+  --radius: 14px;
+  --radius-sm: 9px;
+  --shadow: 0 10px 30px -12px rgb(0 0 0 / 0.6);
+
+  /* Japanese glyphs need a font stack that will not fall back to a Chinese
+     face — the shapes of 直, 令 and friends differ between locales. */
+  --font-jp: 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Noto Sans JP', 'Meiryo', sans-serif;
+  --font-ui: 'Inter', 'Segoe UI', 'Noto Sans', system-ui, sans-serif;
+
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+    --bg: #fbfaf7;
+    --bg-raised: #ffffff;
+    --bg-input: #f1efea;
+    --border: #e3ded4;
+    --border-strong: #cec7b8;
+
+    --text: #1d2333;
+    --text-muted: #5c6580;
+    --text-faint: #8a92a8;
+
+    --accent: #d33a6e;
+    --accent-soft: #d33a6e18;
+    --accent-text: #7a1338;
+
+    --shadow: 0 10px 30px -14px rgb(20 20 40 / 0.25);
+    color-scheme: light;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  /* Respect the notch on iOS so the bottom nav is reachable. */
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+:lang(ja),
+.jp {
+  font-family: var(--font-jp);
+  font-feature-settings: 'palt' 0;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+  margin: 0 0 0.5em;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* Never remove focus rings — the writing exercises are keyboard-navigable. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---- Layout ------------------------------------------------------------- */
+
+.app {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app__main {
+  flex: 1;
+  width: min(940px, 100%);
+  margin-inline: auto;
+  padding: 20px 18px 96px;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  background: color-mix(in oklab, var(--bg) 88%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.topbar__brand {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.topbar__mark {
+  font-family: var(--font-jp);
+  color: var(--accent);
+  font-size: 1.25rem;
+}
+
+.badge-free {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--good-soft);
+  color: var(--good);
+}
+
+/* Bottom tab bar on phones, side rail on desktop. */
+.tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: space-around;
+  gap: 2px;
+  padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
+  background: color-mix(in oklab, var(--bg-raised) 92%, transparent);
+  backdrop-filter: blur(14px);
+  border-top: 1px solid var(--border);
+}
+
+.tabbar__item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 4px;
+  border-radius: var(--radius-sm);
+  font-size: 0.68rem;
+  color: var(--text-faint);
+  transition: color 0.15s, background 0.15s;
+}
+
+.tabbar__item[aria-current='page'] {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.tabbar__icon {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+/* ---- Surfaces ----------------------------------------------------------- */
+
+.card {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  transition: filter 0.15s, transform 0.05s;
+}
+
+.btn:hover {
+  filter: brightness(1.08);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn--ghost {
+  background: transparent;
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+/* ---- Kana chart --------------------------------------------------------- */
+
+.kana-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(66px, 1fr));
+  gap: 8px;
+}
+
+.kana-cell {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.15s, transform 0.08s;
+}
+
+.kana-cell:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.kana-cell__char {
+  font-family: var(--font-jp);
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.kana-cell__reading {
+  font-size: 0.68rem;
+  color: var(--text-faint);
+}
+
+.kana-cell--empty {
+  background: transparent;
+  border-style: dashed;
+  opacity: 0.35;
+  pointer-events: none;
+}

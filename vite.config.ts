@@ -11,15 +11,4 @@ export default defineConfig({
       '@shared': fileURLToPath(new URL('./shared', import.meta.url)),
     },
   },
-  build: {
-    // Stroke data and the kana set are large-ish static payloads; keep them in
-    // their own chunks so the app shell stays small on first paint.
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          fsrs: ['ts-fsrs'],
-        },
-      },
-    },
-  },
 })

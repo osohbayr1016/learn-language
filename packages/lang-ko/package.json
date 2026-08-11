@@ -1,0 +1,18 @@
+{
+  "name": "@lang/ko",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Солонгос хэл сурах модуль — тэг эхлэгчээс TOPIK 6 хүртэл, монгол хэлээр тайлбарласан",
+  "license": "AGPL-3.0-or-later",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./schema": "./src/schema.ts",
+    "./content/*": "./content/*"
+  },
+  "scripts": {
+    "validate": "node scripts/validate.mjs",
+    "stats": "node scripts/stats.mjs"
+  }
+}
