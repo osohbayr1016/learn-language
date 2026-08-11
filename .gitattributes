@@ -1,0 +1,22 @@
+# Normalise line endings: LF in the repository, regardless of the checkout OS.
+# Without this, a Windows checkout commits CRLF and every file looks rewritten
+# to a collaborator on Linux/macOS.
+* text=auto eol=lf
+
+# Generated — collapse in diffs and exclude from language statistics.
+package-lock.json linguist-generated=true -diff
+
+# Binary assets: never diff, never touch line endings.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.webp binary
+*.gif  binary
+*.ico  binary
+*.woff binary
+*.woff2 binary
+*.mp3  binary
+*.ogg  binary
+*.m4a  binary
+*.sqlite binary
+*.db   binary

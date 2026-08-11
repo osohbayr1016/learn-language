@@ -1,0 +1,63 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "nihongo",
+  "main": "./worker/index.ts",
+  "compatibility_date": "2026-06-01",
+  "compatibility_flags": ["nodejs_compat"],
+
+  // The Vite plugin builds the client into dist/client and points `assets`
+  // at it, so `directory` is intentionally omitted here.
+  // `single-page-application` makes the Worker fall through to index.html for
+  // any path the client router owns, while /api/* still hits the Worker.
+  "assets": {
+    "not_found_handling": "single-page-application",
+    "binding": "ASSETS"
+  },
+
+  "observability": {
+    "enabled": true
+  },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "nihongo-db",
+      // Replace with the id printed by: wrangler d1 create nihongo-db
+      "database_id": "REPLACE_WITH_D1_DATABASE_ID",
+      "migrations_dir": "migrations"
+    }
+  ],
+
+  "r2_buckets": [
+    {
+      // Audio clips and stroke-order bundles. Public reads go through the
+      // Worker so we can cache them at the edge and keep Class B ops down.
+      "binding": "MEDIA",
+      "bucket_name": "nihongo-media"
+    }
+  ],
+
+  "durable_objects": {
+    "bindings": [
+      {
+        // One instance per user: owns the SRS op-log and serialises sync so
+        // two devices can never interleave a half-applied review batch.
+        "name": "USER_STATE",
+        "class_name": "UserStateDO"
+      }
+    ]
+  },
+
+  "migrations": [
+    {
+      "tag": "v1",
+      // SQLite-backed Durable Objects — this is the variant available on the
+      // Workers free plan. Do not switch to `new_classes`.
+      "new_sqlite_classes": ["UserStateDO"]
+    }
+  ],
+
+  "vars": {
+    "APP_ENV": "development"
+  }
+}

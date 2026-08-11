@@ -1,0 +1,46 @@
+{
+  "name": "nihongo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Япон хэл сурах үнэгүй платформ — a free Japanese learning platform for Mongolian speakers",
+  "license": "AGPL-3.0-or-later",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "deploy": "npm run build && wrangler deploy",
+    "typecheck": "tsc -b --noEmit false --emitDeclarationOnly false",
+    "cf-typegen": "wrangler types",
+    "db:migrate:local": "wrangler d1 migrations apply nihongo-db --local",
+    "db:migrate:remote": "wrangler d1 migrations apply nihongo-db --remote",
+    "db:reset:local": "node scripts/db/reset-local.mjs",
+    "etl": "node scripts/etl/run.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "hono": "^4.13.1",
+    "idb": "^8.0.3",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-router": "^8.3.0",
+    "ts-fsrs": "^5.4.1",
+    "wanakana": "^5.3.1",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.51.2",
+    "@types/node": "^26.2.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "^6.0.5",
+    "typescript": "^7.0.2",
+    "vite": "^8.2.1",
+    "vitest": "^4.1.10",
+    "wrangler": "^4.120.1"
+  }
+}

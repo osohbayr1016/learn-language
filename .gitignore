@@ -1,0 +1,21 @@
+node_modules/
+dist/
+.wrangler/
+.dev.vars
+.dev.vars.*
+*.local
+.env
+.env.*
+!.env.example
+
+# ETL working area — large upstream dumps, never committed
+data/raw/
+data/build/
+data/audio/
+*.tsbuildinfo
+
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
